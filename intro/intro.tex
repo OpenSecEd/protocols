@@ -1,0 +1,753 @@
+% $Id$
+%\documentclass[handout]{beamer}
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,swedish]{babel}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{subfig}
+\usepackage{multicol}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{stmaryrd}
+\usepackage{booktabs}
+\usepackage[binary,squaren]{SIunits}
+\usepackage{csquotes}
+
+\setbeamertemplate{bibliography item}[text]
+\usepackage[natbib,style=alphabetic,maxbibnames=99]{biblatex}
+\addbibresource{intro.bib}
+
+%\newtheorem{theorem}{Sats}%[chapter]
+\providetranslation[to=swedish]{Theorem}{Sats}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{corollary}{Korollarium}
+\providetranslation[to=swedish]{Corollary}{Korollarium}
+\theoremstyle{definition}
+%\newtheorem{definition}{Definition}
+%\newtheorem{axiom}[definition]{Axiom}
+\newenvironment{axiom}[1]{\begin{block}{Postulat (#1)}}{\end{block}}
+%\newtheorem{example}{Exempel}
+\providetranslation[to=swedish]{Example}{Exempel}
+\newtheorem{exercise}{Övning}
+\theoremstyle{remark}
+\newtheorem{remark}{Anmärkning}
+
+%\numberwithin{section}{chapter}
+%\numberwithin{equation}{chapter}
+
+\DeclareMathOperator{\p}{\mathcal{P}}
+\let\P\p
+\DeclareMathOperator{\C}{\mathcal{C}}
+\DeclareMathOperator{\K}{\mathcal{K}}
+\DeclareMathOperator{\E}{\mathcal{E}}
+\DeclareMathOperator{\D}{\mathcal{D}}
+
+\DeclareMathOperator{\N}{\mathbb{N}}
+\DeclareMathOperator{\Z}{\mathbb{Z}}
+
+\renewcommand{\p}{{P}}
+\renewcommand{\c}{{C}}
+\renewcommand{\k}{{K}}
+\newcommand{\x}{{X}}
+\newcommand{\y}{{Y}}
+\newcommand{\e}{{E}}
+\newcommand{\s}{{S}}
+
+\DeclareMathOperator{\lequiv}{\Longleftrightarrow}
+\DeclareMathOperator{\xor}{\oplus}
+
+\renewcommand{\qedsymbol}{Q.E.D.}
+
+% BAN logic
+\DeclareMathOperator{\believes}{|\!\!\!\equiv}
+\DeclareMathOperator{\said}{|\!\!\!\sim}
+\DeclareMathOperator{\controls}{\Mapsto}
+\DeclareMathOperator{\sees}{\lhd}
+\newcommand{\fresh}[1]{\#(#1)}
+\newcommand{\encrypt}[2]{\{#1\}_{#2}}
+\newcommand{\share}[1]{\stackrel{#1}{\leftrightarrow}}
+\newcommand{\pubkey}[1]{\stackrel{#1}{\mapsto}}
+
+\mode<presentation>{%
+  \usetheme{Frankfurt}
+  \setbeamercovered{transparent}
+  \usecolortheme{seagull}
+}
+\setbeamertemplate{footline}{\insertframenumber}
+
+\title[Säkra protokoll]{%
+  Säkra protokoll och procedurer
+}
+\author{Daniel Bosk\footnote{%
+  Detta verk är tillgängliggjort under licensen Creative Commons 
+  Erkännande-DelaLika 2.5 Sverige (CC BY-SA 2.5 SE).
+	För att se en sammanfattning och kopia av licenstexten besök URL 
+	\url{http://creativecommons.org/licenses/by-sa/2.5/se/}.
+}}
+\institute[MIUN IKS]{%
+  %Department of Information and Communication Systems (ICS),\\
+  %Mid Sweden University, Sundsvall.
+	%
+  Avdelningen för informations- och kommunikationssytem (IKS),\\
+  Mittuniversitetet, Sundsvall.
+}
+\date{\today}
+
+%\pgfdeclareimage[height=0.65cm]{university-logo}{MU_logotyp_int_CMYK.pdf}
+%\logo{\pgfuseimage{university-logo}}
+
+\AtBeginSection[]{%
+  \begin{frame}<beamer>{Översikt}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+%\AtBeginSubsection[]{%
+%  \begin{frame}<beamer>
+%    \begin{center}
+%      \insertsectionhead
+%    \end{center}
+%  \end{frame}
+%}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage{}
+\end{frame}
+
+\begin{frame}{Översikt}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+%\begin{frame}{Litteratur}
+%  \input{literature.tex}
+%\end{frame}
+
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\section{Introduktion}
+
+\subsection{Vad är ett protokoll?}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Ett system består av en uppsättning principals.
+    \item Ett protokoll är en uppsättning regler som styr hur dessa 
+      kommunicerar.
+  \end{itemize}
+  \begin{example}[Tentamen MIUN]
+    \begin{enumerate}
+      \item Tentamensvakten öppnar salen och ger varje tentand ett nummer.
+      \item Tentanden går in och sätter sig vid sin tilldelade plats.
+      \item Efter att tentan börjat jämför tentamensvakten tentandens 
+        legitimation och nummer.
+      \item Vid inlämning av skrivning jämförs legitimationen och numret.
+    \end{enumerate}
+  \end{example}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Bör vara designade för att motstå attacker.
+    \item Både oavsiktligt och avsiktligt brott mot protokollet.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{example}{Beställa vin}
+    \begin{enumerate}
+      \item Hovmästaren visar vinlistan för värden.
+      \item Värden väljer vin, hovmästaren hämtar.
+      \item Värden provsmakar vin, det serveras till gästerna.
+    \end{enumerate}
+  \end{example}
+  \begin{block}{Egenskaper}
+    \begin{description}
+      \item[Konfidentialitet] Gästerna får ej veta priset.
+      \item[Riktighet] Hovmästaren kan inte byta ut vinet.
+      \item[Oavvislighet] Värden kan inte falskt klaga på vinet i efterhand.
+    \end{description}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{example}[Tentamen MIUN]
+    \begin{enumerate}
+      \item Tentamensvakten öppnar salen och ger varje tentand ett nummer.
+      \item Tentanden går in och sätter sig vid sin tilldelade plats.
+      \item Efter att tentan börjat jämför tentamensvakten tentandens 
+        legitimation och nummer.
+      \item Vid inlämning av skrivning jämförs legitimationen och numret.
+    \end{enumerate}
+  \end{example}
+  \begin{block}{Egenskaper}
+    \begin{description}
+      \item[Anonymitet] Varje tentand förblir anonym.
+      \item[Autenticitet] Skrivningen är garanterat associerad med tentanden.
+    \end{description}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Konstrueras utifrån grundläggande antaganden.
+      \begin{itemize}
+        \item Exempelvis att kortägaren kan mata in PIN-koden direkt 
+          i terminalen.
+    \end{itemize}
+    \item Analysera om hoten är rimliga.
+    \item Analysera om protokollet hanterar dem.
+  \end{itemize}
+\end{frame}
+
+\subsection{Ibland blir det fel}
+
+\begin{frame}{\insertsubsectionhead}{Tentamen}
+  \begin{example}[Tentamen KTH]
+    KTH:s tentamensvakter hade inte sista punkten i tentamensprotokollet.
+    \begin{enumerate}
+      \item Tentamensvakten öppnar salen.
+      \item Tentanden går in och sätter sig.
+      \item Efter att tentan börjat undersöker tentamensvakten tentandens 
+        legitimation och antecknar plats i salen.
+      \item Tentanden lämnar in skrivningen.
+    \end{enumerate}
+  \end{example}
+  \begin{block}{Egenskaper}
+    Autentiseringen brister, tentanden kan skriva vilket namn och personnumer 
+    som helst på inlämnad tentamen.
+    Tentanden är inte garanterad anonymitet om den inte explicit ber om att 
+    tentan ska skrivas anonymt.
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Uttagsautomat}
+  \begin{block}{Autentisera uttag}
+    \begin{itemize}
+      \item Banker lagrade kontonummer på magnetremsan.
+      \item PIN-koden skickades till centrala systemet för verifiering.
+    \end{itemize}
+  \end{block}
+  \begin{block}{''Förbättring''}
+    Kryptera PIN-koden och lagra den på magnetremsan så att uttagsautomaten kan 
+    verifiera den när den inte får kontakt med centrala systemet.
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Uttagsautomat}
+  \begin{block}{Problem}
+    \begin{itemize}
+      \item Jag kan byta ut kontonumret men inte ändra koden.
+      \item Ändra kontonummer och använd min egen kod för att ta ut från annans 
+        konto.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Autentisering}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Lösenord och PIN-koder är fundamentala metoder för autentisiering.
+
+    \item Exempelvis 90-talets fjärrlås till bilen:
+      \begin{itemize}
+        \item Nyckeln skickade serienumret.
+        \item Bilen kontrollerade allt den mottog och jämförde med sitt 
+          serienummer.
+      \end{itemize}
+
+    \item Kunde angripas med en inspelningsattack.
+      \begin{itemize}
+        \item Spela in allt som sänds (serienummer).
+        \item Spela upp serienummer för att låsa upp.
+      \end{itemize}
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Ibland kan ett enkelt lösenord vara rätt väg att gå.
+
+    \item Matkuponger på lunchställen:
+      \begin{itemize}
+        \item Papperslapp med serienummer.
+        \item Kan framställas i kopiatorn.
+      \end{itemize}
+
+    \item Hotet är inte värt högre säkerhet.
+
+  \end{itemize}
+\end{frame}
+
+
+\section{Formell notation}
+
+\subsection{Protokoll}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{example}[Protokollbeskrivning]
+    Två principals \(P, P^\prime\) ska kommunicera.
+    \begin{enumerate}
+      \item \(P\) skickar sitt namn till \(P^\prime\).
+      \item \(P^\prime\) svarar med ett token \(t_P\) för vidare användning, 
+        detta är krypterat med \(P\):s kryptonyckel \(k_P\).
+    \end{enumerate}
+  \end{example}
+  \begin{example}[Formell beskrivning]
+    Principals \(P, P^\prime\), token \(t_P\), \(P\):s kryptonyckel \(k_P\).
+    \begin{align*}
+      P\to P^\prime&\colon P \\
+      P^\prime\to P&\colon \{t_P\}_{k_P}
+    \end{align*}
+  \end{example}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Tentamen}
+  \begin{example}[Autentisering MIUN]
+    Låt \(T\) vara tentanden, \(V\) tentamensvakten, \(n_T\) det unika numret 
+    för \(T\) och \(S\) skrivningen.
+    Vidare låt \(k\) vara en kryptonyckel delad mellan legitimationsutfärdaren 
+    och tentamensvakten (legitimation).
+    \begin{align*}
+      V\to T&\colon n_T \\
+      T\to V&\colon \{T\}_k, n_T \\
+      T\to V&\colon \{T\}_k, n_T, S
+    \end{align*}
+  \end{example}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Tentamen}
+  \begin{example}[Autentisering KTH]
+    Låt \(T\) vara tentanden, \(V\) tentamensvakten och \(S\) skrivningen.
+    Vidare låt \(k\) vara en kryptonyckel delad mellan legitimationsutfärdaren 
+    och tentamensvakten (legitimation).
+    \begin{align*}
+      T\to V&\colon T, \{T\}_k \\
+      T\to V&\colon T, S
+    \end{align*}
+  \end{example}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{example}[Needham-Schröder Shared-Key]
+    Låt \(A, B, S\) vara principals, \(S\) en server, \(n_A, n_B\) vara 
+    nonces\footnote{Number used once.}.
+    \begin{align*}
+      A\to S &\colon A, B, n_A \\
+      S\to A &\colon \encrypt{n_A, B, k_{AB}, \encrypt{k_{AB}, 
+      A}{k_{BS}}}{k_{AS}} \\
+      A\to B &\colon \encrypt{k_{AB}, A}{k_{BS}} \\
+      B\to A &\colon \encrypt{n_B}{k_{AB}} \\
+      A\to B &\colon \encrypt{n_B-1}{k_{AB}}
+    \end{align*}
+  \end{example}
+\end{frame}
+
+\subsection{BAN-logik}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Namn efter upphovsmän: Burrows, Abadi och Needham.
+    \item Presenterades i en artikel~\cite{BAN90alo} från 1989.
+    \item Används för formell analys av autentiseringsprotokoll.
+    \item Har väsentligen utökats~\cite{Syverson2001tlo}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Definitioner}
+  \begin{description}
+    \item[\(A\believes X\)] \(A\) tror på \(X\), och kan agera som att \(X\) 
+      vore sann.
+    \item[\(A\said X\)] \(A\) sade \(X\), eller något som innehöll \(X\), vid 
+      något tidigare tillfälle.
+      \(A\) trodde då på \(X\) och förstod att \(X\) skickades.
+    \item[\(A\sees X\)] \(A\) ser \(X\), eller har mottagit ett meddelande 
+      innehållandes \(X\).
+      Detta kan innebära att avkryptera.
+    \item[\(A\controls X\)] \(A\) är auktoritet över \(X\).
+      \(A\) går att lita på gällandes \(X\).
+    \item[\(\fresh X\)] \(X\) är färsk, det vill säga inte en återuppspelning 
+      från tidigare protokollsession.
+  \end{description}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Definitioner}
+  \begin{description}
+    \item[\(A\share{k} B\)] \(A\) och \(B\) delar nyckeln \(k\).
+      \(k\) är giltig för kommunikation mellan \(A\) och \(B\).
+    \item[\(\pubkey{k} A\)] \(A\) har den publika nyckeln \(k\).
+      Den motsvarande privata nyckeln \(k^{-1}\) hålls hemlig.
+    \item[\(\encrypt{X}{k}\)] \(X\) är krypterad med nyckeln \(k\).
+      Principals känner igen egna meddelanden och krypterade meddelanden kan då 
+      användas för att säkert identifiera avsändaren.
+  \end{description}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Postulat}
+  Har följande sex postulat:
+  \begin{itemize}
+    \item Message meaning,
+    \item Nonce verification,
+    \item Jurisdiction,
+    \item Belief conjuncatenation,
+    \item Freshness conjuncatenation,
+    \item Seeing is receiving.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Postulat}
+  \begin{axiom}{Message meaning}
+    Låt \(A\) och \(B\) vara principals, \(k\) är en delad nyckel och \(X\) är 
+    ett uttalande.
+    Då gäller
+    \begin{align*}
+      \frac{A\believes A\share{k} B, A\sees \encrypt{X}{k}}%
+        {A\believes B\said X}.
+    \end{align*}
+    Om \(A\) tror att \(k\) är giltig nyckel för att kommunicera med \(B\) och 
+    \(A\) har mottagit \(X\) krypterat med \(k\),
+    då kan \(A\) tro att \(B\) har sagt \(X\).
+  \end{axiom}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Postulat}
+  \begin{axiom}{Nonce verification}
+    Låt \(A\) och \(B\) vara principals, \(X\) är ett uttalande.
+    Då gäller
+    \begin{align*}
+      \frac{A\believes \fresh X, A\believes B\said X}%
+        {A\believes B\believes X}.
+    \end{align*}
+    Om \(A\) tror att \(X\) är färsk och \(A\) tror att \(B\) har sagt \(X\),
+    då kan \(A\) tro att \(B\) tror på \(X\).
+  \end{axiom}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Postulat}
+  \begin{axiom}{Jurisdiction}
+    Låt \(A\) och \(B\) vara principals, \(K\) är en delad nyckel och \(X\) är 
+    ett uttalande.
+    Då gäller
+    \begin{align*}
+      \frac{A\believes B\controls X, A\believes B\believes X}%
+        {A\believes X}.
+    \end{align*}
+    Om \(A\) tror att \(B\) kontrollerar \(X\) och \(A\) tror att \(B\) tror på 
+    \(X\),
+    då kan \(A\) tro på \(X\).
+  \end{axiom}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Analys}
+  \begin{itemize}
+    \item Måste idealisera protkollet, skriva det i termer av BAN\@.
+    \item Måste identifiera antaganden.
+    \item Annotera protokollet.
+    \item Använd logiken för att härleda vad principals tror på.
+  \end{itemize}
+  För detaljer och exempel, se~\cite{Anderson2008sea} avsnitt 3.8 
+  och~\cite{Syverson2001tlo} avsnitt 2.3.
+\end{frame}
+
+% XXX prove exam protocol
+%\begin{frame}{\insertsubsectionhead}{Exempel}
+%  \begin{block}{Återigen tentamen vid MIUN}
+%    Låt \(T\) vara tentanden, \(V\) tentamensvakten, \(n_T\) det unika numret 
+%    för \(T\) och \(S\) skrivningen.
+%    Vidare låt \(k\) vara en kryptonyckel delad mellan legitimationsutfärdaren 
+%    och tentamensvakten (legitimation).
+%    \begin{align*}
+%      V\to T&\colon n_T \\
+%      T\to V&\colon \{T\}_k, n_T \\
+%      T\to V&\colon \{T\}_k, n_T, S
+%    \end{align*}
+%  \end{block}
+%\end{frame}
+%
+%\begin{frame}{\insertsubsectionhead}{Exempel}
+%  \begin{block}{Idealiserad form}
+%    Tentamensförfarandet på idealiserad form:
+%    \begin{align*}
+%      T\to V&\colon \{T\}_k, \fresh n_T \\
+%      T\to V&\colon \{T\}_k, \fresh n_T, S
+%    \end{align*}
+%  \end{block}
+%  \begin{block}{Antaganden}
+%    Vi gör följande antaganden:
+%    \begin{enumerate}
+%      \item \(V\believes V\share{k} \text{Skatteverket}\).
+%      \item \(V\believes T\controls S\).
+%      \item \(V\believes \fresh n_T\).
+%    \end{enumerate}
+%  \end{block}
+%\end{frame}
+%
+%\begin{frame}{\insertsubsectionhead}{Exempel}
+%  \begin{block}{Vill visa}
+%    \(V\believes (n_T, S)\).
+%  \end{block}
+%  \begin{proof}
+%  \end{proof}
+%\end{frame}
+
+% XXX prove Needham-Schröder
+%\begin{frame}{\insertsubsectionhead}{Exempel}
+%\end{frame}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Med BAN-logik kunde man visa att Needham-Schröder-protokollet krävde 
+      antagandet \(B\believes \fresh{A\share{k_{AB}} B}\).
+    \item Ledde till Denning-Sacco-attacken.
+  \end{itemize}
+  \begin{block}{Denning-Sacco}
+    Låt \(E_A\) beteckna angriparen som låtsas vara \(A\).
+    \begin{align*}
+      E_A\to B &\colon \encrypt{k_{AB}, A}{k_{BS}} \\
+      B\to E_A &\colon \encrypt{n_B^\prime}{k_{AB}} \\
+      E_A\to B &\colon \encrypt{n_B^\prime-1}{k_{AB}}
+    \end{align*}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Begränsningar}
+  \begin{itemize}
+    \item Våra externa antaganden är ett problem: antag att nyckeln inte är 
+      tillgänglig för obehöriga.
+
+    \item Kan bli problem vid idealiseringen av protokollet.
+
+  \end{itemize}
+\end{frame}
+
+
+\section{Protokoll och attacker}
+
+\subsection{Enkel autentisering}
+
+\begin{frame}{\insertsubsectionhead}{En bättre metod för fjärrlås}
+  \begin{example}[Fjärrlås]
+    Låt \(A, B\) vara principals, \(n\) nonce, \(k_A\) en nyckel unik för 
+    \(A\).
+    \begin{align*}
+      A\to B\colon A, \encrypt{A, n}{k_A}
+    \end{align*}
+  \end{example}
+  \begin{block}{Egenskaper}
+    \begin{itemize}
+      \item Nonce \(n\) för färskhet.
+      \item Krypteringen för identifiering.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Nyckelhantering}
+  \begin{itemize}
+    \item Måste hantera nycklarna \(k_i\) för alla enheter \(i\).
+    \item \emph{Nyckeldiversifiering}: huvudnyckel \(k_M\) och generera \(k_i 
+      = \encrypt{i}{k_M}\).
+    \item Måste tänka efter:
+      \begin{itemize}
+        \item 128-bitar nyckel krypterar 16-bitar ID, mindre lämpligt för 
+          diversifiering.
+        \item Svagt chiffer ger också dåligt resultat.
+        \item \(k_i = i\xor k_M\)?
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Kolla nonces}
+  Kolla nonces långt tillbaka i tiden.
+  \begin{itemize}
+    \item Jämför med senaste nonce.
+    \item Spela in två och spela upp dem varannan gång.
+    \item Förbetalda elmätare, köp två laddningar och använd dem om vartannat.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Betjäntattacken}
+  \begin{itemize}
+    \item Hur genereras nonces?
+    \item En person som har tillfällig åtkomst att generera tokens.
+    \item Generera ett antal, använd dem senare.
+    \item Exempelvis engångskoder för att logga in hos internetbanken.
+    \item Attacken fungerar om nonces är (pseudo-) slumptal.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Kontra betjäntattacken}
+  \begin{block}{Förbättring}
+    \begin{itemize}
+      \item Använd en räknare \(c\) som successivt ökas på.
+      \item \(A\to B\colon A, \encrypt{A, c+1}{k_A}\), \(c = c+1\).
+      \item Inget \(c^\prime \leq c\) accepteras.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Problem}
+    \begin{itemize}
+      \item Får inte ha jämförelsen \(c^\prime = c\), ger 
+        synkroniseringsproblem.
+      \item \(c\notin \Z_+\) utan \(c\in \Z_{2^x}\), för något \(x\in \N\): vid 
+        något tillfälle blir då \(c+1 < c \pmod{2^x}\).
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Andra tillämpningar}
+  \begin{itemize}
+    \item Tillbehörskontroll: skrivare ändrar inställning från \unit{1200}{dpi} 
+      till \unit{300}{dpi} om icke-originalbläckpatroner används.
+    \item \enquote{Använd alltid godkända originaldelar}.
+    \item Inte hålla angripare ute, utan hålla användare inne.
+    \item Läs kapitel 7 \emph{Economics} i~\cite{Anderson2008sea} för vidare 
+      diskussion.
+  \end{itemize}
+\end{frame}
+
+\subsection{Challenge--response}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{block}{Grundläggande princip}
+    Två principals \(A, B\) med gemensam nyckel \(k\) och nonce \(n\).
+    \begin{align*}
+      A\to B &\colon n \\
+      B\to A &\colon \encrypt{B, n}{k}
+    \end{align*}
+  \end{block}
+  \begin{block}{Problem}
+    \begin{itemize}
+      \item Dåliga (pseudo-) slumptalsgeneratorer, ger förutsägbara \(n\).
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Tvåfaktorautentisering}
+  \begin{itemize}
+    \item Ha användarnamn och lösenord.
+    \item Komplettera med extern kod; exempelvis genererad av koddosa, SMS till 
+      mobiltelefonen.
+    \item Finns många varianter, kombinera två:
+      \begin{itemize}
+        \item Något du vet (lösenord),
+        \item något du har (koddosa, mobiltelefon),
+        \item något du är (biometrik).
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Tvåfaktorautentisering}
+  \begin{block}{Protokoll (tvåfaktorautentisering med koddosa)}
+    Låt \(A, B, D\) vara principals, \(D\) är koddosa, \(k\) är nyckel delad 
+    mellan \(B, D\) och \(p\) är \(A\):s PIN-kod.
+    \begin{align*}
+      A\to B &\colon A \\
+      B\to A &\colon n \\
+      A\to D &\colon n, p \\
+      D\to A &\colon \encrypt{n}{k} \\
+      A\to B &\colon \encrypt{n}{k}
+    \end{align*}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Tvåkanalsautentisering}
+  \begin{block}{Protokoll (tvåkanalsautentisering med mobiltelefon)}
+    Låt \(A, B, M\) vara principals, \(M\) är mobiltelefon och \(p\) är \(A\):s 
+    lösenord.
+    \begin{align*}
+      A\to B &\colon A, p \\
+      B\to M &\colon n \\
+      M\to A &\colon n \\
+      A\to B &\colon n
+    \end{align*}
+  \end{block}
+\end{frame}
+
+\subsection{Miljöbyte}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{itemize}
+    \item Betalkortsystemet designades för en pålitlig miljö.
+    \item Kraftigt reglerad miljö inbyggd i bankens fasad.
+    \item Tillämpas i den mindre pålitliga miljön i samtliga affärer.
+    \item Skimming.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Personen i mitten}
+  \begin{itemize}
+    \item \enquote{Det är enkelt att spela oavgjort mot en schackstormästare 
+        i postschack: spela bara mot två stormästare samtidigt, en som vit och 
+        en som svart, och skicka deras brev mellan varandra.} (John Convey)
+    \item Problem med pålitliga användargränssnitt: hur vet du att inte 
+      kortterminalen ljuger?
+  \end{itemize}
+\end{frame}
+
+\subsection{Internetbanken och betalkort}
+
+\begin{frame}{\insertsubsectionhead}{Olika former av bankdosor}
+  \begin{block}{Swedbank}
+    \begin{itemize}
+      \item Individuell dosa, förkonfigurerad av banken.
+      \item Kan generera engångskod.
+      \item Kan hantera challenge--response.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Nordea}
+    \begin{itemize}
+      \item Oberoende smartkortläsare, använder individuellt betalkort.
+      \item Kan generera engångskod.
+      \item Kan hantera challenge--response.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Problem som kan uppstå}
+  \begin{block}{Problem}
+    \begin{itemize}
+      \item Om bankkort och dosa förvaras tillsammans kan PIN-koden utläsas 
+        från de slitna knapparna på bankdosan.
+      \item Om kortet används i en dålig terminal har angriparna allt som 
+        behövs för att logga in till ditt bankkonto.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Förbättringar}
+    \begin{itemize}
+      \item Använd inte samma säkerhetsmekanism i flera sammanhang.
+      \item Ha separata oberoende mekanismer.
+      \item Ha ett pålitligt användargränssnitt.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% XXX add slides about BankID
+%\subsection{BankID}
+%\begin{frame}{\insertsubsectionhead}
+%\end{frame}
+%\begin{frame}{\insertsubsectionhead}{Att lämna in deklarationen}
+%\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Referenser}
+	\small
+  \printbibliography{}
+\end{frame}
+
+\end{document}
+
