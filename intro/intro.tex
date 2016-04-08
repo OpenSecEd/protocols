@@ -15,7 +15,46 @@
 \usepackage[binary,squaren]{SIunits}
 \usepackage{csquotes}
 
-\setbeamertemplate{bibliography item}[text]
+\usepackage{listings}
+\lstset{basicstyle=\small,breaklines=true}
+
+\usepackage{xparse}
+\ProvideDocumentEnvironment{exercise}{o}{%
+  \setbeamercolor{block body}{bg=yellow!30,fg=black}
+  \setbeamercolor{block title}{bg=yellow,fg=black}
+  \IfValueTF{#1}{%
+    \begin{block}{Exercise: #1}
+  }{%
+    \begin{block}{Exercise}
+  }
+}{%
+  \end{block}
+}
+
+\mode<presentation>{%
+  \usetheme{Berlin}
+  \setbeamertemplate{footline}{%
+    \begin{beamercolorbox}[colsep=1.5pt]{upper separation line foot}
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+      leftskip=.3cm,rightskip=.3cm plus1fil]{author in head/foot}%
+      \leavevmode{\usebeamerfont{author in head/foot}\insertshortauthor}%
+      \hfill%
+      {\usebeamerfont{institute in head/foot}%
+        \usebeamercolor[fg]{institute in head/foot}\insertshortinstitute}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+      leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+      {\usebeamerfont{title in head/foot}\insertshorttitle}%
+      \hfill\insertframenumber%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
+    \end{beamercolorbox}
+  }
+  \setbeamercovered{transparent}
+  \setbeamertemplate{bibliography item}[text]
+}\setbeamertemplate{bibliography item}[text]
+
 \usepackage[natbib,style=alphabetic,maxbibnames=99]{biblatex}
 \addbibresource{intro.bib}
 
@@ -30,9 +69,9 @@
 \newenvironment{axiom}[1]{\begin{block}{Postulat (#1)}}{\end{block}}
 %\newtheorem{example}{Exempel}
 \providetranslation[to=swedish]{Example}{Exempel}
-\newtheorem{exercise}{Övning}
+%\newtheorem{exercise}{Övning}
 \theoremstyle{remark}
-\newtheorem{remark}{Anmärkning}
+%\newtheorem{remark}{Anmärkning}
 
 %\numberwithin{section}{chapter}
 %\numberwithin{equation}{chapter}
@@ -70,17 +109,10 @@
 \newcommand{\share}[1]{\stackrel{#1}{\leftrightarrow}}
 \newcommand{\pubkey}[1]{\stackrel{#1}{\mapsto}}
 
-\mode<presentation>{%
-  \usetheme{Frankfurt}
-  \setbeamercovered{transparent}
-  \usecolortheme{seagull}
-}
-\setbeamertemplate{footline}{\insertframenumber}
-
 \title[Säkra protokoll]{%
   Säkra protokoll och procedurer
 }
-\author{Daniel Bosk\footnote{%
+\author[D.~Bosk]{Daniel Bosk\footnote{%
   Detta verk är tillgängliggjort under licensen Creative Commons 
   Erkännande-DelaLika 2.5 Sverige (CC BY-SA 2.5 SE).
 	För att se en sammanfattning och kopia av licenstexten besök URL 
@@ -103,27 +135,12 @@
     \tableofcontents[currentsection]
   \end{frame}
 }
-%\AtBeginSubsection[]{%
-%  \begin{frame}<beamer>
-%    \begin{center}
-%      \insertsectionhead
-%    \end{center}
-%  \end{frame}
-%}
 
 \begin{document}
 
 \begin{frame}
   \titlepage{}
 \end{frame}
-
-\begin{frame}{Översikt}
-  \tableofcontents
-  % You might wish to add the option [pausesections]
-\end{frame}
-%\begin{frame}{Litteratur}
-%  \input{literature.tex}
-%\end{frame}
 
 
 % Since this a solution template for a generic talk, very little can
@@ -141,7 +158,7 @@
 
 \subsection{Vad är ett protokoll?}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Ett system består av en uppsättning principals.
     \item Ett protokoll är en uppsättning regler som styr hur dessa 
@@ -158,14 +175,14 @@
   \end{example}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Bör vara designade för att motstå attacker.
     \item Både oavsiktligt och avsiktligt brott mot protokollet.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{example}{Beställa vin}
     \begin{enumerate}
       \item Hovmästaren visar vinlistan för värden.
@@ -182,7 +199,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{example}[Tentamen MIUN]
     \begin{enumerate}
       \item Tentamensvakten öppnar salen och ger varje tentand ett nummer.
@@ -200,7 +217,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Konstrueras utifrån grundläggande antaganden.
       \begin{itemize}
@@ -214,7 +231,7 @@
 
 \subsection{Ibland blir det fel}
 
-\begin{frame}{\insertsubsectionhead}{Tentamen}
+\begin{frame}
   \begin{example}[Tentamen KTH]
     KTH:s tentamensvakter hade inte sista punkten i tentamensprotokollet.
     \begin{enumerate}
@@ -233,7 +250,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Uttagsautomat}
+\begin{frame}
   \begin{block}{Autentisera uttag}
     \begin{itemize}
       \item Banker lagrade kontonummer på magnetremsan.
@@ -246,7 +263,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Uttagsautomat}
+\begin{frame}
   \begin{block}{Problem}
     \begin{itemize}
       \item Jag kan byta ut kontonumret men inte ändra koden.
@@ -258,7 +275,7 @@
 
 \subsection{Autentisering}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Lösenord och PIN-koder är fundamentala metoder för autentisiering.
 
@@ -278,7 +295,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Ibland kan ett enkelt lösenord vara rätt väg att gå.
 
@@ -298,7 +315,7 @@
 
 \subsection{Protokoll}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{example}[Protokollbeskrivning]
     Två principals \(P, P^\prime\) ska kommunicera.
     \begin{enumerate}
@@ -316,7 +333,7 @@
   \end{example}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Tentamen}
+\begin{frame}{Tentamen}
   \begin{example}[Autentisering MIUN]
     Låt \(T\) vara tentanden, \(V\) tentamensvakten, \(n_T\) det unika numret 
     för \(T\) och \(S\) skrivningen.
@@ -330,7 +347,7 @@
   \end{example}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Tentamen}
+\begin{frame}{Tentamen}
   \begin{example}[Autentisering KTH]
     Låt \(T\) vara tentanden, \(V\) tentamensvakten och \(S\) skrivningen.
     Vidare låt \(k\) vara en kryptonyckel delad mellan legitimationsutfärdaren 
@@ -342,7 +359,7 @@
   \end{example}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{example}[Needham-Schröder Shared-Key]
     Låt \(A, B, S\) vara principals, \(S\) en server, \(n_A, n_B\) vara 
     nonces\footnote{Number used once.}.
@@ -359,7 +376,7 @@
 
 \subsection{BAN-logik}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Namn efter upphovsmän: Burrows, Abadi och Needham.
     \item Presenterades i en artikel~\cite{BAN90alo} från 1989.
@@ -368,7 +385,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Definitioner}
+\begin{frame}{Definitioner}
   \begin{description}
     \item[\(A\believes X\)] \(A\) tror på \(X\), och kan agera som att \(X\) 
       vore sann.
@@ -385,7 +402,7 @@
   \end{description}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Definitioner}
+\begin{frame}{Definitioner}
   \begin{description}
     \item[\(A\share{k} B\)] \(A\) och \(B\) delar nyckeln \(k\).
       \(k\) är giltig för kommunikation mellan \(A\) och \(B\).
@@ -397,7 +414,7 @@
   \end{description}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Postulat}
+\begin{frame}{Postulat}
   Har följande sex postulat:
   \begin{itemize}
     \item Message meaning,
@@ -409,7 +426,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Postulat}
+\begin{frame}{Postulat}
   \begin{axiom}{Message meaning}
     Låt \(A\) och \(B\) vara principals, \(k\) är en delad nyckel och \(X\) är 
     ett uttalande.
@@ -424,7 +441,7 @@
   \end{axiom}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Postulat}
+\begin{frame}{Postulat}
   \begin{axiom}{Nonce verification}
     Låt \(A\) och \(B\) vara principals, \(X\) är ett uttalande.
     Då gäller
@@ -437,7 +454,7 @@
   \end{axiom}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Postulat}
+\begin{frame}{Postulat}
   \begin{axiom}{Jurisdiction}
     Låt \(A\) och \(B\) vara principals, \(K\) är en delad nyckel och \(X\) är 
     ett uttalande.
@@ -452,7 +469,7 @@
   \end{axiom}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Analys}
+\begin{frame}{Analys}
   \begin{itemize}
     \item Måste idealisera protkollet, skriva det i termer av BAN\@.
     \item Måste identifiera antaganden.
@@ -464,7 +481,7 @@
 \end{frame}
 
 % XXX prove exam protocol
-%\begin{frame}{\insertsubsectionhead}{Exempel}
+%\begin{frame}{Exempel}
 %  \begin{block}{Återigen tentamen vid MIUN}
 %    Låt \(T\) vara tentanden, \(V\) tentamensvakten, \(n_T\) det unika numret 
 %    för \(T\) och \(S\) skrivningen.
@@ -478,7 +495,7 @@
 %  \end{block}
 %\end{frame}
 %
-%\begin{frame}{\insertsubsectionhead}{Exempel}
+%\begin{frame}{Exempel}
 %  \begin{block}{Idealiserad form}
 %    Tentamensförfarandet på idealiserad form:
 %    \begin{align*}
@@ -496,7 +513,7 @@
 %  \end{block}
 %\end{frame}
 %
-%\begin{frame}{\insertsubsectionhead}{Exempel}
+%\begin{frame}{Exempel}
 %  \begin{block}{Vill visa}
 %    \(V\believes (n_T, S)\).
 %  \end{block}
@@ -505,10 +522,10 @@
 %\end{frame}
 
 % XXX prove Needham-Schröder
-%\begin{frame}{\insertsubsectionhead}{Exempel}
+%\begin{frame}{Exempel}
 %\end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Med BAN-logik kunde man visa att Needham-Schröder-protokollet krävde 
       antagandet \(B\believes \fresh{A\share{k_{AB}} B}\).
@@ -524,7 +541,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Begränsningar}
+\begin{frame}{Begränsningar}
   \begin{itemize}
     \item Våra externa antaganden är ett problem: antag att nyckeln inte är 
       tillgänglig för obehöriga.
@@ -539,7 +556,7 @@
 
 \subsection{Enkel autentisering}
 
-\begin{frame}{\insertsubsectionhead}{En bättre metod för fjärrlås}
+\begin{frame}{En bättre metod för fjärrlås}
   \begin{example}[Fjärrlås]
     Låt \(A, B\) vara principals, \(n\) nonce, \(k_A\) en nyckel unik för 
     \(A\).
@@ -555,7 +572,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Nyckelhantering}
+\begin{frame}{Nyckelhantering}
   \begin{itemize}
     \item Måste hantera nycklarna \(k_i\) för alla enheter \(i\).
     \item \emph{Nyckeldiversifiering}: huvudnyckel \(k_M\) och generera \(k_i 
@@ -570,7 +587,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Kolla nonces}
+\begin{frame}{Kolla nonces}
   Kolla nonces långt tillbaka i tiden.
   \begin{itemize}
     \item Jämför med senaste nonce.
@@ -579,7 +596,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Betjäntattacken}
+\begin{frame}{Betjäntattacken}
   \begin{itemize}
     \item Hur genereras nonces?
     \item En person som har tillfällig åtkomst att generera tokens.
@@ -589,7 +606,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Kontra betjäntattacken}
+\begin{frame}{Kontra betjäntattacken}
   \begin{block}{Förbättring}
     \begin{itemize}
       \item Använd en räknare \(c\) som successivt ökas på.
@@ -607,7 +624,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Andra tillämpningar}
+\begin{frame}{Andra tillämpningar}
   \begin{itemize}
     \item Tillbehörskontroll: skrivare ändrar inställning från \unit{1200}{dpi} 
       till \unit{300}{dpi} om icke-originalbläckpatroner används.
@@ -620,7 +637,7 @@
 
 \subsection{Challenge--response}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{block}{Grundläggande princip}
     Två principals \(A, B\) med gemensam nyckel \(k\) och nonce \(n\).
     \begin{align*}
@@ -635,7 +652,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Tvåfaktorautentisering}
+\begin{frame}{Tvåfaktorautentisering}
   \begin{itemize}
     \item Ha användarnamn och lösenord.
     \item Komplettera med extern kod; exempelvis genererad av koddosa, SMS till 
@@ -649,7 +666,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Tvåfaktorautentisering}
+\begin{frame}{Tvåfaktorautentisering}
   \begin{block}{Protokoll (tvåfaktorautentisering med koddosa)}
     Låt \(A, B, D\) vara principals, \(D\) är koddosa, \(k\) är nyckel delad 
     mellan \(B, D\) och \(p\) är \(A\):s PIN-kod.
@@ -663,7 +680,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Tvåkanalsautentisering}
+\begin{frame}{Tvåkanalsautentisering}
   \begin{block}{Protokoll (tvåkanalsautentisering med mobiltelefon)}
     Låt \(A, B, M\) vara principals, \(M\) är mobiltelefon och \(p\) är \(A\):s 
     lösenord.
@@ -678,7 +695,7 @@
 
 \subsection{Miljöbyte}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}
   \begin{itemize}
     \item Betalkortsystemet designades för en pålitlig miljö.
     \item Kraftigt reglerad miljö inbyggd i bankens fasad.
@@ -687,7 +704,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Personen i mitten}
+\begin{frame}{Personen i mitten}
   \begin{itemize}
     \item \enquote{Det är enkelt att spela oavgjort mot en schackstormästare 
         i postschack: spela bara mot två stormästare samtidigt, en som vit och 
@@ -699,7 +716,7 @@
 
 \subsection{Internetbanken och betalkort}
 
-\begin{frame}{\insertsubsectionhead}{Olika former av bankdosor}
+\begin{frame}{Olika former av bankdosor}
   \begin{block}{Swedbank}
     \begin{itemize}
       \item Individuell dosa, förkonfigurerad av banken.
@@ -716,7 +733,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}{Problem som kan uppstå}
+\begin{frame}{Problem som kan uppstå}
   \begin{block}{Problem}
     \begin{itemize}
       \item Om bankkort och dosa förvaras tillsammans kan PIN-koden utläsas 
@@ -736,9 +753,9 @@
 
 % XXX add slides about BankID
 %\subsection{BankID}
-%\begin{frame}{\insertsubsectionhead}
+%\begin{frame}
 %\end{frame}
-%\begin{frame}{\insertsubsectionhead}{Att lämna in deklarationen}
+%\begin{frame}{Att lämna in deklarationen}
 %\end{frame}
 
 
