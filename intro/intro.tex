@@ -551,6 +551,72 @@
   \end{itemize}
 \end{frame}
 
+\subsection{Automated Verification}
+
+\begin{frame}
+  \begin{block}{Automated Theorem Proving}
+    \begin{itemize}
+      \item Russel and Whitehead's Principia Mathematica from 1910.
+      \item Löwenheim-Skolem theorem from 1920.
+      \item Herbrand universe and interpretation from 1930.
+      \item Gödel's On Formally Undecidable Propositions of Principia 
+        Mathematica and Related Systems from 1931.
+      \item Hence automated theorem proving works for some theorems, but not 
+        all, it depends on the decidability of the problem.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Proof Verification}
+    \begin{itemize}
+      \item This is a simpler problem where we verify a proof.
+      \item We do this by having each step of the proof verifiable by 
+        a function.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Automated Tools}
+    \begin{itemize}
+      \item There exists numerous tools, e.g.\ ProVerif~\cite{ProVerif}.
+      \item These are generally based on an equational theory.
+      \item Then the equations are used to verify that the security properties 
+        hold.
+      \item We generate a proof that our properties cannot be broken under the 
+        assumptions of the equational theory.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{example}[Public-key crypto with ProVerif]
+    \begin{lstlisting}
+type skey.
+type pkey.
+type seed.
+type block.
+type encblock.
+
+(* Probabilistic public-key encryption *)
+
+fun pk(skey): pkey.
+fun enc(block, pkey, seed): encblock.
+fun dec(encblock, skey): block.
+equation forall x: block, y: skey, z: seed;  dec(enc(x, pk(y), z), y) = x.
+    \end{lstlisting}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+    \item The idea is similar to that of BAN-logic.
+    \item However, usually these automated verification tools verify that we 
+      are not vulnerable to known attacks.
+  \end{itemize}
+\end{frame}
+
 
 \section{Protokoll och attacker}
 
