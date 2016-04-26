@@ -16,16 +16,16 @@
 \usepackage{csquotes}
 
 \usepackage{listings}
-\lstset{basicstyle=\small,breaklines=true}
+\lstset{basicstyle=\small,breaklines=true,numbers=left}
 
 \usepackage{xparse}
 \ProvideDocumentEnvironment{exercise}{o}{%
   \setbeamercolor{block body}{bg=yellow!30,fg=black}
   \setbeamercolor{block title}{bg=yellow,fg=black}
   \IfValueTF{#1}{%
-    \begin{block}{Exercise: #1}
+    \begin{block}{\translate{Exercise}: #1}
   }{%
-    \begin{block}{Exercise}
+    \begin{block}{\translate{Exercise}}
   }
 }{%
   \end{block}
@@ -53,7 +53,7 @@
   }
   \setbeamercovered{transparent}
   \setbeamertemplate{bibliography item}[text]
-}\setbeamertemplate{bibliography item}[text]
+}
 
 \usepackage[natbib,style=alphabetic,maxbibnames=99]{biblatex}
 \addbibresource{intro.bib}
@@ -96,6 +96,7 @@
 
 \DeclareMathOperator{\lequiv}{\Longleftrightarrow}
 \DeclareMathOperator{\xor}{\oplus}
+\DeclareMathOperator{\concat}{||}
 
 \renewcommand{\qedsymbol}{Q.E.D.}
 
@@ -131,7 +132,7 @@
 %\logo{\pgfuseimage{university-logo}}
 
 \AtBeginSection[]{%
-  \begin{frame}<beamer>{Översikt}
+  \begin{frame}<beamer>
     \tableofcontents[currentsection]
   \end{frame}
 }
@@ -159,11 +160,16 @@
 \subsection{Vad är ett protokoll?}
 
 \begin{frame}
-  \begin{itemize}
-    \item Ett system består av en uppsättning principals.
-    \item Ett protokoll är en uppsättning regler som styr hur dessa 
-      kommunicerar.
-  \end{itemize}
+  \begin{definition}[Protokoll]
+    \begin{itemize}
+      \item Ett system består av en uppsättning principals.
+      \item Ett protokoll är en uppsättning regler som styr hur dessa 
+        kommunicerar.
+    \end{itemize}
+  \end{definition}
+
+  \pause{}
+
   \begin{example}[Tentamen MIUN]
     \begin{enumerate}
       \item Tentamensvakten öppnar salen och ger varje tentand ett nummer.
@@ -176,20 +182,25 @@
 \end{frame}
 
 \begin{frame}
-  \begin{itemize}
-    \item Bör vara designade för att motstå attacker.
-    \item Både oavsiktligt och avsiktligt brott mot protokollet.
-  \end{itemize}
+  \begin{alertblock}{Att tänka på}
+    \begin{itemize}
+      \item Bör vara designade för att motstå attacker.
+      \item Både oavsiktligt och avsiktligt brott mot protokollet.
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
 
 \begin{frame}
-  \begin{example}{Beställa vin}
+  \begin{example}[Beställa vin]
     \begin{enumerate}
       \item Hovmästaren visar vinlistan för värden.
       \item Värden väljer vin, hovmästaren hämtar.
       \item Värden provsmakar vin, det serveras till gästerna.
     \end{enumerate}
   \end{example}
+
+  \pause{}
+
   \begin{block}{Egenskaper}
     \begin{description}
       \item[Konfidentialitet] Gästerna får ej veta priset.
@@ -209,6 +220,9 @@
       \item Vid inlämning av skrivning jämförs legitimationen och numret.
     \end{enumerate}
   \end{example}
+
+  \pause{}
+
   \begin{block}{Egenskaper}
     \begin{description}
       \item[Anonymitet] Varje tentand förblir anonym.
@@ -218,22 +232,23 @@
 \end{frame}
 
 \begin{frame}
-  \begin{itemize}
-    \item Konstrueras utifrån grundläggande antaganden.
-      \begin{itemize}
-        \item Exempelvis att kortägaren kan mata in PIN-koden direkt 
-          i terminalen.
+  \begin{alertblock}{Att tänka på}
+    \begin{itemize}
+      \item Konstrueras utifrån grundläggande antaganden.
+        \begin{itemize}
+          \item Exempelvis att kortägaren kan mata in PIN-koden direkt 
+            i terminalen.
+        \end{itemize}
+      \item Analysera om hoten är rimliga.
+      \item Analysera om protokollet hanterar dem.
     \end{itemize}
-    \item Analysera om hoten är rimliga.
-    \item Analysera om protokollet hanterar dem.
-  \end{itemize}
+  \end{alertblock}
 \end{frame}
 
 \subsection{Ibland blir det fel}
 
 \begin{frame}
   \begin{example}[Tentamen KTH]
-    KTH:s tentamensvakter hade inte sista punkten i tentamensprotokollet.
     \begin{enumerate}
       \item Tentamensvakten öppnar salen.
       \item Tentanden går in och sätter sig.
@@ -242,35 +257,48 @@
       \item Tentanden lämnar in skrivningen.
     \end{enumerate}
   \end{example}
+
+  \pause{}
+
   \begin{block}{Egenskaper}
-    Autentiseringen brister, tentanden kan skriva vilket namn och personnumer 
-    som helst på inlämnad tentamen.
-    Tentanden är inte garanterad anonymitet om den inte explicit ber om att 
-    tentan ska skrivas anonymt.
+    \begin{itemize}
+      \item Autentiseringen brister, tentanden kan skriva vilket namn och 
+        personnumer som helst på inlämnad tentamen.
+      \item Ingen anonymitet.
+    \end{itemize}
   \end{block}
 \end{frame}
 
 \begin{frame}
-  \begin{block}{Autentisera uttag}
+  \begin{example}[Autentisera uttag]
     \begin{itemize}
       \item Banker lagrade kontonummer på magnetremsan.
       \item PIN-koden skickades till centrala systemet för verifiering.
     \end{itemize}
-  \end{block}
-  \begin{block}{''Förbättring''}
+  \end{example}
+
+  \pause{}
+
+  \begin{alertblock}{\enquote{Förbättring}}
     Kryptera PIN-koden och lagra den på magnetremsan så att uttagsautomaten kan 
     verifiera den när den inte får kontakt med centrala systemet.
-  \end{block}
+  \end{alertblock}
+
+  \pause{}
+
+  \begin{exercise}
+    Några problem?
+  \end{exercise}
 \end{frame}
 
 \begin{frame}
-  \begin{block}{Problem}
+  \begin{alertblock}{Problem}
     \begin{itemize}
       \item Jag kan byta ut kontonumret men inte ändra koden.
       \item Ändra kontonummer och använd min egen kod för att ta ut från annans 
         konto.
     \end{itemize}
-  \end{block}
+  \end{alertblock}
 \end{frame}
 
 \subsection{Autentisering}
@@ -279,12 +307,16 @@
   \begin{itemize}
     \item Lösenord och PIN-koder är fundamentala metoder för autentisiering.
 
+      \pause{}
+
     \item Exempelvis 90-talets fjärrlås till bilen:
       \begin{itemize}
         \item Nyckeln skickade serienumret.
         \item Bilen kontrollerade allt den mottog och jämförde med sitt 
           serienummer.
       \end{itemize}
+
+      \pause{}
 
     \item Kunde angripas med en inspelningsattack.
       \begin{itemize}
@@ -305,6 +337,8 @@
         \item Kan framställas i kopiatorn.
       \end{itemize}
 
+      \pause{}
+
     \item Hotet är inte värt högre säkerhet.
 
   \end{itemize}
@@ -324,6 +358,9 @@
         detta är krypterat med \(P\):s kryptonyckel \(k_P\).
     \end{enumerate}
   \end{example}
+
+  \pause{}
+
   \begin{example}[Formell beskrivning]
     Principals \(P, P^\prime\), token \(t_P\), \(P\):s kryptonyckel \(k_P\).
     \begin{align*}
@@ -333,8 +370,8 @@
   \end{example}
 \end{frame}
 
-\begin{frame}{Tentamen}
-  \begin{example}[Autentisering MIUN]
+\begin{frame}
+  \begin{example}[Tentamen MIUN]
     Låt \(T\) vara tentanden, \(V\) tentamensvakten, \(n_T\) det unika numret 
     för \(T\) och \(S\) skrivningen.
     Vidare låt \(k\) vara en kryptonyckel delad mellan legitimationsutfärdaren 
@@ -347,7 +384,7 @@
   \end{example}
 \end{frame}
 
-\begin{frame}{Tentamen}
+\begin{frame}
   \begin{example}[Autentisering KTH]
     Låt \(T\) vara tentanden, \(V\) tentamensvakten och \(S\) skrivningen.
     Vidare låt \(k\) vara en kryptonyckel delad mellan legitimationsutfärdaren 
@@ -385,7 +422,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Definitioner}
+\begin{frame}[allowframebreaks]{Definitioner}
   \begin{description}
     \item[\(A\believes X\)] \(A\) tror på \(X\), och kan agera som att \(X\) 
       vore sann.
@@ -399,11 +436,11 @@
       \(A\) går att lita på gällandes \(X\).
     \item[\(\fresh X\)] \(X\) är färsk, det vill säga inte en återuppspelning 
       från tidigare protokollsession.
-  \end{description}
-\end{frame}
-
-\begin{frame}{Definitioner}
-  \begin{description}
+%  \end{description}
+%\end{frame}
+%
+%\begin{frame}{Definitioner}
+%  \begin{description}
     \item[\(A\share{k} B\)] \(A\) och \(B\) delar nyckeln \(k\).
       \(k\) är giltig för kommunikation mellan \(A\) och \(B\).
     \item[\(\pubkey{k} A\)] \(A\) har den publika nyckeln \(k\).
@@ -414,7 +451,7 @@
   \end{description}
 \end{frame}
 
-\begin{frame}{Postulat}
+\begin{frame}
   Har följande sex postulat:
   \begin{itemize}
     \item Message meaning,
@@ -426,7 +463,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Postulat}
+\begin{frame}
   \begin{axiom}{Message meaning}
     Låt \(A\) och \(B\) vara principals, \(k\) är en delad nyckel och \(X\) är 
     ett uttalande.
@@ -441,7 +478,7 @@
   \end{axiom}
 \end{frame}
 
-\begin{frame}{Postulat}
+\begin{frame}
   \begin{axiom}{Nonce verification}
     Låt \(A\) och \(B\) vara principals, \(X\) är ett uttalande.
     Då gäller
@@ -454,7 +491,7 @@
   \end{axiom}
 \end{frame}
 
-\begin{frame}{Postulat}
+\begin{frame}
   \begin{axiom}{Jurisdiction}
     Låt \(A\) och \(B\) vara principals, \(K\) är en delad nyckel och \(X\) är 
     ett uttalande.
@@ -469,7 +506,7 @@
   \end{axiom}
 \end{frame}
 
-\begin{frame}{Analys}
+\begin{frame}
   \begin{itemize}
     \item Måste idealisera protkollet, skriva det i termer av BAN\@.
     \item Måste identifiera antaganden.
@@ -541,53 +578,96 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{Begränsningar}
-  \begin{itemize}
-    \item Våra externa antaganden är ett problem: antag att nyckeln inte är 
-      tillgänglig för obehöriga.
+\begin{frame}
+  \begin{alertblock}{Begränsningar}
+    \begin{itemize}
+      \item Våra externa antaganden är ett problem: antag att nyckeln inte är 
+        tillgänglig för obehöriga.
 
-    \item Kan bli problem vid idealiseringen av protokollet.
+      \item Kan bli problem vid idealiseringen av protokollet.
 
-  \end{itemize}
+      \item Är tämligen komplext.
+
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
 
 \subsection{Automated Verification}
 
 \begin{frame}
-  \begin{block}{Automated Theorem Proving}
-    \begin{itemize}
-      \item Russel and Whitehead's Principia Mathematica from 1910.
-      \item Löwenheim-Skolem theorem from 1920.
-      \item Herbrand universe and interpretation from 1930.
-      \item Gödel's On Formally Undecidable Propositions of Principia 
-        Mathematica and Related Systems from 1931.
-      \item Hence automated theorem proving works for some theorems, but not 
-        all, it depends on the decidability of the problem.
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \begin{block}{Proof Verification}
-    \begin{itemize}
-      \item This is a simpler problem where we verify a proof.
-      \item We do this by having each step of the proof verifiable by 
-        a function.
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \begin{block}{Automated Tools}
+  \begin{block}{Automated 
+      Tools\footfullcite{AnalyzingSecurityProtocols,FormalSecurityProofs}}
     \begin{itemize}
       \item There exists numerous tools, e.g.\ ProVerif~\cite{ProVerif}.
-      \item These are generally based on an equational theory.
+      \item These are generally based on two things:
+        \begin{itemize}
+          \item an equational theory,
+          \item an inference system.
+        \end{itemize}
+
       \item Then the equations are used to verify that the security properties 
         hold.
+
       \item We generate a proof that our properties cannot be broken under the 
         assumptions of the equational theory.
     \end{itemize}
   \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{definition}[Inference System]
+    \begin{itemize}
+      \item An \emph{inference rule} (or \emph{axiom}) is a rule of the form 
+        \(\frac{u_1, \ldots, u_n}{u}\), where \(u_1, \ldots, u_n\) are terms in 
+        the formal system.
+      \item \(u\) is inferred from \(u_1, \ldots, u_n\).
+      \item An \emph{inference system} is a set of inference rules.
+    \end{itemize}
+  \end{definition}
+
+  \pause{}
+  
+  \begin{example}[BAN logic]
+    The axioms of BAN logic is an example of an inference system.
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Dolev-Yao inference system]
+    \begin{itemize}
+      \item Can deduce concatenation from items: \(\frac{x, y}{x\concat y}\)
+      \item Can deduce items from concatenation: \(\frac{x\concat y}{x}\) and 
+        \(\frac{x\concat y}{y}\)
+      \item Can encrypt with plaintext and key: \(\frac{x, y}{\encrypt{x}{y}}\)
+      \item Can decrypt with ciphertext and key: \(\frac{\encrypt{x}{y}, 
+            y}{x}\)
+      \item \dots
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{definition}[Equational theory]
+    Is simply a set of equations using terms from a formal system.  
+  \end{definition}
+
+  \begin{example}
+    \begin{itemize}
+      \item \(x\xor ( y\xor z ) = ( x\xor y ) \xor z\)
+      \item \(x \xor y = y\xor x\)
+      \item \(x\xor x = 0\)
+      \item \(x\xor 0 = x\)
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{alertblock}{Putting it together}
+    \begin{itemize}
+      \item This type of property cannot be expressed with an inference system.
+      \item We need a complementing equational theory.
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -611,10 +691,16 @@ equation forall x: block, y: skey, z: seed;  dec(enc(x, pk(y), z), y) = x.
 
 \begin{frame}
   \begin{itemize}
+    \item We also have to defined the protocol interactions for ProVerif.
     \item The idea is similar to that of BAN-logic.
-    \item However, usually these automated verification tools verify that we 
-      are not vulnerable to known attacks.
+    \item ProVerif does the analysis automatically.
   \end{itemize}
+  
+  \pause{}
+
+  \begin{alertblock}{Remember}
+    This only complements the rigorous analysis made by experts!
+  \end{alertblock}
 \end{frame}
 
 
@@ -622,8 +708,8 @@ equation forall x: block, y: skey, z: seed;  dec(enc(x, pk(y), z), y) = x.
 
 \subsection{Enkel autentisering}
 
-\begin{frame}{En bättre metod för fjärrlås}
-  \begin{example}[Fjärrlås]
+\begin{frame}
+  \begin{example}[Bättre fjärrlås]
     Låt \(A, B\) vara principals, \(n\) nonce, \(k_A\) en nyckel unik för 
     \(A\).
     \begin{align*}
@@ -790,6 +876,9 @@ equation forall x: block, y: skey, z: seed;  dec(enc(x, pk(y), z), y) = x.
       \item Kan hantera challenge--response.
     \end{itemize}
   \end{block}
+
+  \pause{}
+
   \begin{block}{Nordea}
     \begin{itemize}
       \item Oberoende smartkortläsare, använder individuellt betalkort.
@@ -808,6 +897,9 @@ equation forall x: block, y: skey, z: seed;  dec(enc(x, pk(y), z), y) = x.
         behövs för att logga in till ditt bankkonto.
     \end{itemize}
   \end{block}
+
+  \pause{}
+
   \begin{block}{Förbättringar}
     \begin{itemize}
       \item Använd inte samma säkerhetsmekanism i flera sammanhang.
