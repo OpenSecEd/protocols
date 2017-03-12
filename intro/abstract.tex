@@ -1,12 +1,23 @@
-As soon as two principals need to interact, there is need for a protocol which 
-secures the communication, be it inside or between systems --- even one 
-principal communicating with itself in different points in time, which is the 
-case when storing something for use at a later time.
-We will explore how to design secure protocols and introduce some tools for 
-verification.
+As soon as two entities need to interact, there is need for a protocol which 
+secures the communication.
+This can be inside a system or even one entity communicating with itself in 
+different points in time, which is the case when storing something for use at 
+a later time.
+Protocols can be easy to verify manually if they are simple, but even then, as 
+we will see, it is easy to miss something.
+We will discuss how to design secure protocols and introduce some tools for 
+verification, e.g.\ automated formal verification.
+
+More concretely, after this session you should be able to
+\begin{itemize}
+  \item \emph{understand} the different approaches and their limits to verify 
+    the security of protocols.
+\end{itemize}
 
 Anderson gives an overview of this area in 
 \citetitle{Anderson2008sea}~\cite{Anderson2008sea}, Chapter 
 3 \enquote{Protocols}.
-Gollmann has a more technically detailed treatment in Chapter 15 of 
-\citetitle{Gollmann2011cs}~\cite{Gollmann2011cs}.
+Gollmann has a more technically oriented treatment of a part of this topic in 
+Chapter 15 of \citetitle{Gollmann2011cs}~\cite{Gollmann2011cs}.
+To complement these texts we will also touch upon some of the material in 
+\citetitle{ProVerif}~\cite{ProVerif}.
