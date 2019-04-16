@@ -1,0 +1,164 @@
+\mode*
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\section{Some principles}
+
+\subsection{Enkel autentisering}
+
+\begin{frame}
+  \begin{example}[Bättre fjärrlås]
+    Låt \(A, B\) vara principals, \(n\) nonce, \(k_A\) en nyckel unik för 
+    \(A\).
+    \begin{align*}
+      A\to B\colon A, \encrypt{A, n}{k_A}
+    \end{align*}
+  \end{example}
+  \begin{block}{Egenskaper}
+    \begin{itemize}
+      \item Nonce \(n\) för färskhet.
+      \item Krypteringen för identifiering.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Kolla nonces}
+  Kolla nonces långt tillbaka i tiden.
+  \begin{itemize}
+    \item Jämför med senaste nonce.
+    \item Spela in två och spela upp dem varannan gång.
+    \item Förbetalda elmätare, köp två laddningar och använd dem om vartannat.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Betjäntattacken}
+  \begin{itemize}
+    \item Hur genereras nonces?
+    \item En person som har tillfällig åtkomst att generera tokens.
+    \item Generera ett antal, använd dem senare.
+    \item Exempelvis engångskoder för att logga in hos internetbanken.
+    \item Attacken fungerar om nonces är (pseudo-) slumptal.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Kontra betjäntattacken}
+  \begin{block}{Förbättring}
+    \begin{itemize}
+      \item Använd en räknare \(c\) som successivt ökas på.
+      \item \(A\to B\colon A, \encrypt{A, c+1}{k_A}\), \(c = c+1\).
+      \item Inget \(c^\prime \leq c\) accepteras.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Problem}
+    \begin{itemize}
+      \item Får inte ha jämförelsen \(c^\prime = c\), ger 
+        synkroniseringsproblem.
+      \item \(c\notin \Z_+\) utan \(c\in \Z_{2^x}\), för något \(x\in \N\): vid 
+        något tillfälle blir då \(c+1 < c \pmod{2^x}\).
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Challenge--response}
+
+\begin{frame}
+  \begin{block}{Grundläggande princip}
+    Två principals \(A, B\) med gemensam nyckel \(k\) och nonce \(n\).
+    \begin{align*}
+      A\to B &\colon n \\
+      B\to A &\colon \encrypt{B, n}{k}
+    \end{align*}
+  \end{block}
+  \begin{block}{Problem}
+    \begin{itemize}
+      \item Dåliga (pseudo-) slumptalsgeneratorer, ger förutsägbara \(n\).
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Miljöbyte}
+
+\begin{frame}
+  \begin{itemize}
+    \item Betalkortsystemet designades för en pålitlig miljö.
+    \item Kraftigt reglerad miljö inbyggd i bankens fasad.
+    \item Tillämpas i den mindre pålitliga miljön i samtliga affärer.
+    \item Skimming.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Personen i mitten}
+  \begin{itemize}
+    \item \enquote{Det är enkelt att spela oavgjort mot en schackstormästare 
+        i postschack: spela bara mot två stormästare samtidigt, en som vit och 
+        en som svart, och skicka deras brev mellan varandra.} (John Convey)
+    \item Problem med pålitliga användargränssnitt: hur vet du att inte 
+      kortterminalen ljuger?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Olika former av bankdosor}
+  \begin{block}{Swedbank}
+    \begin{itemize}
+      \item Individuell dosa, förkonfigurerad av banken.
+      \item Kan generera engångskod.
+      \item Kan hantera challenge--response.
+    \end{itemize}
+  \end{block}
+
+  \pause{}
+
+  \begin{block}{Nordea}
+    \begin{itemize}
+      \item Oberoende smartkortläsare, använder individuellt betalkort.
+      \item Kan generera engångskod.
+      \item Kan hantera challenge--response.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Problem som kan uppstå}
+  \begin{block}{Problem}
+    \begin{itemize}
+      \item Om bankkort och dosa förvaras tillsammans kan PIN-koden utläsas 
+        från de slitna knapparna på bankdosan.
+      \item Om kortet används i en dålig terminal har angriparna allt som 
+        behövs för att logga in till ditt bankkonto.
+    \end{itemize}
+  \end{block}
+
+  \pause{}
+
+  \begin{block}{Förbättringar}
+    \begin{itemize}
+      \item Använd inte samma säkerhetsmekanism i flera sammanhang.
+      \item Ha separata oberoende mekanismer.
+      \item Ha ett pålitligt användargränssnitt.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% XXX add slides about BankID
+%\subsection{BankID}
+%\begin{frame}
+%\end{frame}
+%\begin{frame}{Att lämna in deklarationen}
+%\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\small
+  \printbibliography
+\end{frame}
+

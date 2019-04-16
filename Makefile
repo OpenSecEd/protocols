@@ -1,4 +1,5 @@
 SUBDIR+= 	secure-protocols
+SUBDIR+= 	principles
 SUBDIR+= 	formal-verification
 
 
