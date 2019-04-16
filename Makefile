@@ -1,5 +1,4 @@
 SUBDIR+= 	secure-protocols
-SUBDIR+= 	protocols-attacks
 SUBDIR+= 	formal-verification
 
 
