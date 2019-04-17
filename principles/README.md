@@ -1,2 +1,2 @@
-[Protocols and formal verification] is an introduction to security analysis of 
-protocols, both "natural" analysis and formal verification.
+[Principles for Secure Protocols](https://youtu.be/NjmqLgkxzlQ) covers some 
+principles for designing secure protocols.
