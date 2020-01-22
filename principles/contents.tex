@@ -1,0 +1,237 @@
+\mode*
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\section{Some principles}
+
+\subsection{Nonces}
+
+\begin{frame}
+  \begin{example}[Remote car locks]
+    Let \(K\) be the key, \(C\) the car and \(k_{K, C}\) a shared key and \(n\) 
+    is a nonce.
+    \begin{align*}
+      K\to C\colon K, \encrypt{K, n}{k_{K, C}}
+    \end{align*}
+  \end{example}
+
+  \pause
+
+  \begin{block}{Properties}
+    \begin{itemize}
+      \item Nonce \(n\) for freshness.
+      \item Encryption for authentication.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{question}
+    \begin{itemize}
+      \item How far back should we check nonces?
+    \end{itemize}
+  \end{question}
+
+  \begin{example}
+    \begin{itemize}
+      \item Compare with the last nonce.
+      \item Record two nonces and replay them every other time.
+      \item Happened to prepaid electricity meters in South Africa.
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{question}
+    \begin{itemize}
+      \item How are the nonces generated?
+    \end{itemize}
+  \end{question}
+
+  \begin{example}[Valet attack]
+    \begin{itemize}
+      \item Someone has temporary access.
+      \item Generate \(m\) one-time tokens and use later.
+      \item Works if nonces are (pseudo-)random.
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{example}
+    \begin{itemize}
+      \item Use a counter \(c\) which increases for every use.
+      \item \(K\to C\colon K, \encrypt{K, c+1}{k_{K, C}}\), \(c\gets c+1\).
+      \item No \(c' \leq c\) is accepted.
+    \end{itemize}
+  \end{example}
+
+  \begin{remark}
+    \begin{itemize}
+      \item Checking \(c' = c\) yields synchronization errors.
+      \item \(c\notin \Z_+\) but \(c\in \Z_{2^x}\), for some \(x\in \N\): \ie 
+        \(c+1 < c \pmod{2^x}\) at some point.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\subsection{Challenge--response}
+
+\begin{frame}
+  \begin{definition}[Challenge--response]
+    Two principals \(A, B\) with shared key~\(k\) and nonce \(n\).
+    \begin{align*}
+      A\to B &\colon n \\
+      B\to A &\colon f_k(n)
+    \end{align*}
+    For some keyed function~\(f_k\).
+  \end{definition}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Man-in-the-middle]
+    \begin{itemize}
+      \item \enquote{It's easy to tie against a chess grand master in postal 
+          chess: play against two and just relay their moves.}
+    \end{itemize}
+  \end{example}
+
+  \pause
+
+  \begin{example}
+    \begin{itemize}
+      \item The payment terminal in the supermarket is a man-in-the-middle 
+        between you and your card.
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{example}
+    \begin{itemize}
+      \item All routers from you to your email provider are men-in-the-middle.
+      \item Your phone operator is a man-in-the-middle between you and whoever 
+        you call.
+      \item That person's phone operator is also a man-in-the-middle.
+      \item \dots
+    \end{itemize}
+  \end{example}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item Must protect against this.
+      \item Can use public keys and digitally signed certificates.
+      \item Where is the root of trust?
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\subsection{Change of environment}
+
+\begin{frame}
+  \begin{example}[Bank card system for ATMs]
+    \begin{itemize}
+      \item Bank card system for ATMs.
+      \item Secure environment in the facade of a bank.
+      \item Move the system to stores for payment --- skimming!
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Swedbank banking hardware tokens]
+    \begin{itemize}
+      \item Hardware tokens are individualized, configured by bank.
+      \item Generates one-time codes.
+      \item Does challenge--response.
+    \end{itemize}
+  \end{example}
+
+  \pause
+
+  \begin{example}[Nordea banking hardware tokens]
+    \begin{itemize}
+      \item Non-individualized smart-card reader, individualized by payment 
+        card.
+      \item Generates one-time codes.
+      \item Does challenge--response.
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{remark}
+    \begin{itemize}
+      \item If card reader and card stored together, maybe PIN can be read from 
+        worn buttons.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\begin{frame}
+  \begin{remark}
+    \begin{itemize}
+      \item What's the difference between a terminal in a supermarket and the 
+        user's hardware token? Nothing.
+      \item You enter PIN, they do the rest to log into your bank online.
+      \item It's a man-in-the-middle, cannot tell the difference.
+    \end{itemize}
+  \end{remark}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item Hard to get away with this attack.
+      \item Leave the country directly afterwards?
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{No-reuse principle}
+    \begin{itemize}
+      \item Don't reuse the same security mechanism.
+      \item Have separate mechanisms.
+      \item Have a trustworthy user interface.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[BankID]
+    \begin{itemize}
+      \item Trusted interface (phone, own computer), tells you what it's doing.
+      \item Separate mechanisms for logging in and signing.
+    \end{itemize}
+  \end{example}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item Must be used correctly by the developer!
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\small
+  \printbibliography
+\end{frame}
+

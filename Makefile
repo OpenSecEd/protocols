@@ -1,4 +1,6 @@
-SUBDIR= 	./intro
+SUBDIR+= 	secure-protocols
+SUBDIR+= 	principles
+SUBDIR+= 	formal-verification
 
 
 INCLUDE_MAKEFILES=makefiles

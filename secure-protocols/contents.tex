@@ -1,0 +1,237 @@
+\mode*
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\section{Secure protocols}
+
+\subsection{What's a protocol?}
+
+\begin{frame}
+  \begin{definition}[Protocol]
+    \begin{itemize}
+      \item A system consists of some set of entities.
+      \item A protocol is a set of rules governing their communication.
+    \end{itemize}
+  \end{definition}
+
+  \pause
+
+  \begin{example}[Exam]
+    \begin{enumerate}
+      \item The invigilator opens the room and gives each student a number.
+      \item The students take their numbered seats.
+      \item The invigilator checks each student's ID and number.
+      \item The invigilator checks again when student hands in exam.
+    \end{enumerate}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{remark}
+    \begin{itemize}
+      \item Protocols must be designed to resist attacks.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Ordering wine]
+    \begin{enumerate}
+      \item The Maître d'Hôtel brings the list of wines.
+      \item The host chooses wine, the Maître d'Hôtel brings.
+      \item The host tastes, then it's served.
+    \end{enumerate}
+  \end{example}
+
+  \pause
+
+  \begin{block}{Properties}
+    \begin{description}
+      \item[Confidentiality] The guests never learn the price.
+      \item[Integrity] The Maître d'Hôtel cannot change wine.
+      \item[Non-repudiation] The host cannot falsely complain about the wine 
+        \emph{after dinner}.
+    \end{description}
+  \end{block}
+\end{frame}
+
+\subsection{Modelling and Assumptions}
+
+\begin{frame}
+  \begin{remark}
+    \begin{itemize}
+      \item Protocols are constructed from basic assumptions.
+      \item We must analyse if the threats violates assumptions.
+      \item Must analyse if the protocol actually mitigates them.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Exam]
+    \begin{enumerate}
+      \item The invigilator opens the room and gives each student a number.
+      \item The students take their numbered seats.
+      \item The invigilator checks each student's ID and number.
+      \item The invigilator checks again when student hands in exam.
+    \end{enumerate}
+  \end{example}
+
+  \pause
+
+  \begin{block}{Properties}
+    \begin{description}
+      \item[Anonymity] The teacher cannot distinguish two students.
+      \item[Authenticity] The student who handed in the exam gets the 
+        grade.
+    \end{description}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Properties}
+    \begin{description}
+      \item[Anonymity] The teacher cannot distinguish two students.
+      \item[Authenticity] The student who wrote the exam gets the grade.
+    \end{description}
+  \end{block}
+
+  \begin{exercise}
+    \begin{itemize}
+      \item Who is the adversary/-ies?
+      \item What are the assumptions?
+      \item Does the exam protocol achieve these properties?
+    \end{itemize}
+  \end{exercise}
+\end{frame}
+
+\begin{frame}
+  \begin{remark}[Adversaries]
+    \begin{itemize}
+      \item The teacher wants to map student identity to exam.
+      \item The student want to hand in someone else's answers.
+    \end{itemize}
+  \end{remark}
+
+  \begin{question}
+    \begin{itemize}
+      \item What can they do?
+    \end{itemize}
+  \end{question}
+\end{frame}
+
+\begin{frame}
+  \begin{remark}[Assumptions]
+    \begin{itemize}
+      \item The numbers are randomly assigned.
+      \item The students cannot communicate during the exam.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\begin{frame}
+  \begin{remark}[Deanonymize exams]
+    \begin{itemize}
+      \item The teacher had the same class in a previous course.
+      \item The teacher learned everyone's handwriting.
+      \item Handwriting is unique enough to deanonymize exams.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\subsection{More examples}
+
+\begin{frame}
+  \begin{example}[Non-anonymous exam]
+    \begin{enumerate}
+      \item The invigilator opens the room.
+      \item The students take self-chosen seats.
+      \item The invigilator checks each student's ID and notes placement.
+      \item The student hands the exam to the invigilator.
+    \end{enumerate}
+  \end{example}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item No authenticity.
+      \item Even with the same assumptions.
+      \item Students can write each other's names on the exam.
+      \item They don't need to communicate during the exam.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Authenticate withdrawals]
+    \begin{itemize}
+      \item Banks stored account number on the magnet strip.
+      \item The PIN-code was sent to the central system for verification.
+    \end{itemize}
+  \end{example}
+
+  \pause
+
+  \begin{example}[Improved for offline ATMs]
+    \begin{itemize}
+      \item Banks stored account number on the magnet strip.
+      \item Banks stored the PIN \emph{encrypted} on the magnet strip.
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Remote car locks, 1990s]
+    \begin{itemize}
+      \item The key broadcast the car's serial number.
+      \item If in range, the car checked and unlocked.
+    \end{itemize}
+  \end{example}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item Replay attack: record, replay.
+      \item Wrongly assumed that only (honest) cars are listening.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+\begin{frame}
+  \begin{example}[Remote car locks, 2019]
+    \begin{itemize}
+      \item Do secure crypto stuff (challenge--response).
+    \end{itemize}
+  \end{example}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item Relay attack: record in one end, transmit in other.
+      \item Wrongly assumed that the key is close if it \enquote{talks} to the 
+        car.
+      \item Distance-bounding protocols are starting to get implemented.
+    \end{itemize}
+  \end{remark}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\small
+  \printbibliography
+\end{frame}
+
